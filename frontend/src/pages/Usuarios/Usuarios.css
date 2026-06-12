@@ -1,0 +1,23 @@
+.usuarios-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.badge.admin {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.checkbox-label {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 10px !important;
+  margin-top: 24px;
+}
+
+.checkbox-label input {
+  width: 18px;
+  height: 18px;
+}
