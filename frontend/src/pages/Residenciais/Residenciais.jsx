@@ -7,6 +7,8 @@ function Residenciais() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
+  const [busca, setBusca] = useState("");
+
   const [modalAberto, setModalAberto] = useState(false);
   const [residencialEditando, setResidencialEditando] = useState(null);
 
@@ -82,11 +84,31 @@ function Residenciais() {
   async function salvarResidencial(event) {
     event.preventDefault();
 
+    if (!form.nome.trim()) {
+      alert("Informe o nome do residencial.");
+      return;
+    }
+
+    if (!form.cidade.trim()) {
+      alert("Informe a cidade.");
+      return;
+    }
+
+    if (!form.estado.trim()) {
+      alert("Informe o estado.");
+      return;
+    }
+
+    if (form.estado.trim().length !== 2) {
+      alert("Informe o estado com 2 letras. Ex: SC");
+      return;
+    }
+
     try {
       const dados = {
-        nome: form.nome,
-        cidade: form.cidade,
-        estado: form.estado,
+        nome: form.nome.trim(),
+        cidade: form.cidade.trim(),
+        estado: form.estado.trim().toUpperCase(),
         endereco: form.endereco,
         observacao: form.observacao
       };
@@ -147,11 +169,23 @@ function Residenciais() {
     }
   }
 
-  function montarUrlImagem(caminho) {
-    if (!caminho) return null;
+ function montarUrlImagem(caminho) {
+  if (!caminho) return null;
 
-    return `http://localhost:3000${caminho}`;
-  }
+  const uploadsUrl = import.meta.env.VITE_UPLOADS_URL || "http://localhost:3000";
+
+  return `${uploadsUrl}${caminho}`;
+}
+
+  const residenciaisFiltrados = residenciais.filter((residencial) => {
+    const textoBusca = busca.toLowerCase();
+
+    return (
+      residencial.nome?.toLowerCase().includes(textoBusca) ||
+      residencial.cidade?.toLowerCase().includes(textoBusca) ||
+      residencial.estado?.toLowerCase().includes(textoBusca)
+    );
+  });
 
   if (carregando) {
     return <div className="loading-box">Carregando residenciais...</div>;
@@ -174,11 +208,23 @@ function Residenciais() {
         </button>
       </div>
 
-      {residenciais.length === 0 ? (
+      <div className="filters-card residenciais-filters">
+        <label>
+          Buscar residencial
+          <input
+            type="text"
+            value={busca}
+            onChange={(event) => setBusca(event.target.value)}
+            placeholder="Digite nome, cidade ou estado..."
+          />
+        </label>
+      </div>
+
+      {residenciaisFiltrados.length === 0 ? (
         <div className="empty-box">Nenhum residencial cadastrado.</div>
       ) : (
         <div className="residenciais-grid">
-          {residenciais.map((residencial) => (
+          {residenciaisFiltrados.map((residencial) => (
             <div className="residencial-card" key={residencial.id}>
               <div className="residencial-image">
                 {residencial.imagem ? (

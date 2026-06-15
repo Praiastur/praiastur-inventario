@@ -82,10 +82,30 @@ function Usuarios() {
   async function salvarUsuario(event) {
     event.preventDefault();
 
+    if (!form.nome.trim()) {
+      alert("Informe o nome do usuário.");
+      return;
+    }
+
+    if (!form.email.trim()) {
+      alert("Informe o e-mail do usuário.");
+      return;
+    }
+
+    if (!usuarioEditando && !form.senha.trim()) {
+      alert("Informe a senha inicial do usuário.");
+      return;
+    }
+
+    if (!form.perfil) {
+      alert("Selecione o perfil do usuário.");
+      return;
+    }
+
     try {
       const dados = {
-        nome: form.nome,
-        email: form.email,
+        nome: form.nome.trim(),
+        email: form.email.trim(),
         perfil: form.perfil,
         status: form.status
       };
@@ -110,7 +130,6 @@ function Usuarios() {
       alert(error.response?.data?.mensagem || "Erro ao salvar usuário.");
     }
   }
-
   async function inativarUsuario(id) {
     const confirmar = window.confirm("Tem certeza que deseja inativar este usuário?");
 

@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./MainLayout.css";
+import logoSistema from "../assets/logo-sistema.png";
 
 function MainLayout() {
   const navigate = useNavigate();
@@ -20,8 +21,7 @@ function MainLayout() {
     <div className="main-layout">
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <h2>Praiastur</h2>
-          <span>Inventário</span>
+          <img src={logoSistema} alt="Sistema Inventário" />
         </div>
 
         <nav className="sidebar-menu">
@@ -31,7 +31,7 @@ function MainLayout() {
           <NavLink to="/saidas">Saídas</NavLink>
           <NavLink to="/residenciais">Residenciais</NavLink>
           <NavLink to="/apartamentos">Apartamentos</NavLink>
-          <NavLink to="/itens-operacionais">Itens Operacionais</NavLink>
+          <NavLink to="/itens-operacionais">Operacionais</NavLink>
 
           {isAdmin && <NavLink to="/usuarios">Usuários</NavLink>}
           {isAdmin && <NavLink to="/historicos">Histórico</NavLink>}

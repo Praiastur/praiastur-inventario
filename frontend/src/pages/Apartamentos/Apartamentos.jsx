@@ -8,6 +8,8 @@ function Apartamentos() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
+  const [busca, setBusca] = useState("");
+
   const [modalAberto, setModalAberto] = useState(false);
   const [apartamentoEditando, setApartamentoEditando] = useState(null);
   const [filtroResidencial, setFiltroResidencial] = useState("");
@@ -89,10 +91,20 @@ function Apartamentos() {
   async function salvarApartamento(event) {
     event.preventDefault();
 
+    if (!form.residencial_id) {
+      alert("Selecione um residencial.");
+      return;
+    }
+
+    if (!form.nome_numero.trim()) {
+      alert("Informe o nome ou número do apartamento/espaço.");
+      return;
+    }
+
     try {
       const dados = {
         residencial_id: Number(form.residencial_id),
-        nome_numero: form.nome_numero,
+        nome_numero: form.nome_numero.trim(),
         tipo: form.tipo,
         observacao: form.observacao
       };
@@ -154,10 +166,23 @@ function Apartamentos() {
   }
 
   function montarUrlImagem(caminho) {
-    if (!caminho) return null;
+  if (!caminho) return null;
 
-    return `http://localhost:3000${caminho}`;
-  }
+  const uploadsUrl = import.meta.env.VITE_UPLOADS_URL || "http://localhost:3000";
+
+  return `${uploadsUrl}${caminho}`;
+}
+
+  const apartamentosFiltrados = apartamentos.filter((apartamento) => {
+    const textoBusca = busca.toLowerCase();
+
+    return (
+      apartamento.nome_numero?.toLowerCase().includes(textoBusca) ||
+      apartamento.tipo?.toLowerCase().includes(textoBusca) ||
+      apartamento.observacao?.toLowerCase().includes(textoBusca) ||
+      apartamento.residencial?.nome?.toLowerCase().includes(textoBusca)
+    );
+  });
 
   if (carregando) {
     return <div className="loading-box">Carregando apartamentos...</div>;
@@ -180,7 +205,7 @@ function Apartamentos() {
         </button>
       </div>
 
-      <div className="filters-card">
+      <div className="filters-card apartamentos-filters">
         <label>
           Filtrar por residencial
           <select
@@ -196,10 +221,20 @@ function Apartamentos() {
             ))}
           </select>
         </label>
+
+        <label>
+          Buscar apartamento/espaço
+          <input
+            type="text"
+            value={busca}
+            onChange={(event) => setBusca(event.target.value)}
+            placeholder="Digite número, tipo ou residencial..."
+          />
+        </label>
       </div>
 
       <div className="table-card">
-        {apartamentos.length === 0 ? (
+        {apartamentosFiltrados.length === 0 ? (
           <div className="empty-box">Nenhum apartamento/espaço cadastrado.</div>
         ) : (
           <table className="data-table">
@@ -216,7 +251,7 @@ function Apartamentos() {
             </thead>
 
             <tbody>
-              {apartamentos.map((apartamento) => (
+              {apartamentosFiltrados.map((apartamento) => (
                 <tr key={apartamento.id}>
                   <td>
                     <div className="mini-image-box">

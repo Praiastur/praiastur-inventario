@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import logo from "../../assets/logo-sistema.png";
 import "./Login.css";
 
 function Login() {
@@ -37,8 +38,8 @@ function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-        <h1>Praiastur Inventário</h1>
-        <p>Acesse o sistema interno de controle.</p>
+        <img className="login-logo" src={logo} alt="Logo do sistema" />
+        <p>Bem-vindo de volta. Acesse sua conta.</p>
 
         <form onSubmit={fazerLogin}>
           <label>E-mail</label>

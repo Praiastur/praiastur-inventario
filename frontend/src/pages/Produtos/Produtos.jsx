@@ -7,6 +7,8 @@ function Produtos() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
+  const [busca, setBusca] = useState("");
+
   const [modalAberto, setModalAberto] = useState(false);
   const [produtoEditando, setProdutoEditando] = useState(null);
 
@@ -71,13 +73,37 @@ function Produtos() {
       [name]: value
     }));
   }
-
   async function salvarProduto(event) {
     event.preventDefault();
 
+    if (!form.nome.trim()) {
+      alert("Informe o nome do produto.");
+      return;
+    }
+
+    if (!produtoEditando && form.quantidade_atual === "") {
+      alert("Informe a quantidade inicial.");
+      return;
+    }
+
+    if (!produtoEditando && Number(form.quantidade_atual) < 0) {
+      alert("A quantidade inicial não pode ser negativa.");
+      return;
+    }
+
+    if (form.estoque_minimo === "") {
+      alert("Informe o estoque mínimo.");
+      return;
+    }
+
+    if (Number(form.estoque_minimo) < 0) {
+      alert("O estoque mínimo não pode ser negativo.");
+      return;
+    }
+
     try {
       const dados = {
-        nome: form.nome,
+        nome: form.nome.trim(),
         estoque_minimo: Number(form.estoque_minimo),
         observacao: form.observacao
       };
@@ -120,6 +146,9 @@ function Produtos() {
       alert(error.response?.data?.mensagem || "Erro ao reativar produto.");
     }
   }
+  const produtosFiltrados = produtos.filter((produto) =>
+    produto.nome.toLowerCase().includes(busca.toLowerCase())
+  );
 
   if (carregando) {
     return <div className="loading-box">Carregando produtos...</div>;
@@ -141,9 +170,19 @@ function Produtos() {
           Novo produto
         </button>
       </div>
-
+      <div className="filters-card">
+        <label>
+          Buscar produto
+          <input
+            type="text"
+            value={busca}
+            onChange={(event) => setBusca(event.target.value)}
+            placeholder="Digite o nome do produto..."
+          />
+        </label>
+      </div>
       <div className="table-card">
-        {produtos.length === 0 ? (
+        {produtosFiltrados.length === 0 ? (
           <div className="empty-box">Nenhum produto cadastrado.</div>
         ) : (
           <table className="data-table">
@@ -159,7 +198,7 @@ function Produtos() {
             </thead>
 
             <tbody>
-              {produtos.map((produto) => {
+              {produtosFiltrados.map((produto) => {
                 const estoqueBaixo =
                   Number(produto.quantidade_atual) <= Number(produto.estoque_minimo);
 

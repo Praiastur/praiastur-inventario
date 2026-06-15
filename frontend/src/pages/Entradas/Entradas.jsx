@@ -65,6 +65,21 @@ function Entradas() {
   async function salvarEntrada(event) {
     event.preventDefault();
 
+    if (!form.produto_id) {
+      alert("Selecione um produto.");
+      return;
+    }
+
+    if (!form.quantidade) {
+      alert("Informe a quantidade da entrada.");
+      return;
+    }
+
+    if (Number(form.quantidade) <= 0) {
+      alert("A quantidade precisa ser maior que zero.");
+      return;
+    }
+
     try {
       await api.post("/entradas", {
         produto_id: Number(form.produto_id),
@@ -78,7 +93,6 @@ function Entradas() {
       alert(error.response?.data?.mensagem || "Erro ao registrar entrada.");
     }
   }
-
   function formatarData(data) {
     if (!data) return "-";
 

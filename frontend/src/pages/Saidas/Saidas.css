@@ -19,9 +19,9 @@
 }
 
 .saida-itens-box {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
+  background: #fff7f2;
+  border: 1px solid #ffd3c2;
+  border-radius: 12px;
   padding: 16px;
 }
 
@@ -35,17 +35,17 @@
 
 .saida-itens-header h3 {
   font-size: 17px;
-  color: #111827;
+  color: #111111;
 }
 
 .saida-itens-header button {
   border: none;
-  background: #2563eb;
+  background: #ff5a1f;
   color: #ffffff;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 9px 12px;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .saida-item-row {
@@ -63,12 +63,13 @@
 .remove-item-button {
   height: 42px;
   border: none;
-  background: #ef4444;
-  color: #ffffff;
-  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #ffd3c2;
+  color: #ff5a1f;
+  border-radius: 8px;
   padding: 0 12px;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 @media (max-width: 760px) {

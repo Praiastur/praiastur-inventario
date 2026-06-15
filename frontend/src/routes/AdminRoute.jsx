@@ -5,7 +5,7 @@ function AdminRoute({ children }) {
   const usuario = usuarioSalvo ? JSON.parse(usuarioSalvo) : null;
 
   if (usuario?.perfil !== "ADMINISTRADOR") {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;

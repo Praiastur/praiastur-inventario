@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const routes = require("../routes");
@@ -8,16 +9,25 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true
+  })
+);
+
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 app.use("/api", routes);
 
-app.get("/", (req, res) => {
-  return res.json({
-    mensagem: "API do Praiastur Inventário está funcionando."
-  });
+const frontendPath = path.join(__dirname, "..", "..", "frontend", "dist");
+
+app.use(express.static(frontendPath));
+
+app.get(/^\/(?!api|uploads).*/, (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 app.listen(PORT, () => {

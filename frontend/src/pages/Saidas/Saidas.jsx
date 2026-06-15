@@ -116,9 +116,37 @@ function Saidas() {
       };
     });
   }
-
   async function salvarSaida(event) {
     event.preventDefault();
+
+    if (!form.destinatario.trim()) {
+      alert("Informe o destinatário da saída.");
+      return;
+    }
+
+    if (!form.itens || form.itens.length === 0) {
+      alert("Adicione pelo menos um produto na saída.");
+      return;
+    }
+
+    for (let i = 0; i < form.itens.length; i++) {
+      const item = form.itens[i];
+
+      if (!item.produto_id) {
+        alert(`Selecione o produto do item ${i + 1}.`);
+        return;
+      }
+
+      if (!item.quantidade) {
+        alert(`Informe a quantidade do item ${i + 1}.`);
+        return;
+      }
+
+      if (Number(item.quantidade) <= 0) {
+        alert(`A quantidade do item ${i + 1} precisa ser maior que zero.`);
+        return;
+      }
+    }
 
     try {
       const itensFormatados = form.itens.map((item) => ({
@@ -127,7 +155,7 @@ function Saidas() {
       }));
 
       await api.post("/saidas", {
-        destinatario: form.destinatario,
+        destinatario: form.destinatario.trim(),
         observacao: form.observacao,
         itens: itensFormatados
       });

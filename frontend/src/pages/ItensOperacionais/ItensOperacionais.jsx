@@ -8,11 +8,13 @@ function ItensOperacionais() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
+
   const [modalAberto, setModalAberto] = useState(false);
   const [itemEditando, setItemEditando] = useState(null);
 
   const [filtroApartamento, setFiltroApartamento] = useState("");
   const [filtroStatus, setFiltroStatus] = useState("");
+  const [busca, setBusca] = useState("");
 
   const [form, setForm] = useState({
     apartamento_id: "",
@@ -102,10 +104,35 @@ function ItensOperacionais() {
   async function salvarItem(event) {
     event.preventDefault();
 
+    if (!form.apartamento_id) {
+      alert("Selecione um apartamento/espaço.");
+      return;
+    }
+
+    if (!form.nome.trim()) {
+      alert("Informe o nome do item.");
+      return;
+    }
+
+    if (form.quantidade === "") {
+      alert("Informe a quantidade.");
+      return;
+    }
+
+    if (Number(form.quantidade) < 0) {
+      alert("A quantidade não pode ser negativa.");
+      return;
+    }
+
+    if (!form.status_item) {
+      alert("Selecione o status do item.");
+      return;
+    }
+
     try {
       const dados = {
         apartamento_id: Number(form.apartamento_id),
-        nome: form.nome,
+        nome: form.nome.trim(),
         quantidade: Number(form.quantidade),
         status_item: form.status_item,
         observacao: form.observacao
@@ -156,6 +183,18 @@ function ItensOperacionais() {
     return "muted";
   }
 
+  const itensFiltrados = itens.filter((item) => {
+    const textoBusca = busca.toLowerCase();
+
+    return (
+      item.nome?.toLowerCase().includes(textoBusca) ||
+      item.observacao?.toLowerCase().includes(textoBusca) ||
+      item.status_item?.toLowerCase().includes(textoBusca) ||
+      item.apartamento?.nome_numero?.toLowerCase().includes(textoBusca) ||
+      item.apartamento?.residencial?.nome?.toLowerCase().includes(textoBusca)
+    );
+  });
+
   if (carregando) {
     return <div className="loading-box">Carregando itens operacionais...</div>;
   }
@@ -184,11 +223,12 @@ function ItensOperacionais() {
       alert(error.response?.data?.mensagem || "Erro ao enviar imagem.");
     }
   }
-
   function montarUrlImagem(caminho) {
     if (!caminho) return null;
 
-    return `http://localhost:3000${caminho}`;
+    const uploadsUrl = import.meta.env.VITE_UPLOADS_URL || "http://localhost:3000";
+
+    return `${uploadsUrl}${caminho}`;
   }
   return (
     <div>
@@ -236,10 +276,22 @@ function ItensOperacionais() {
             <option value="EM_FALTA">Em falta</option>
           </select>
         </label>
+
+        <label>
+          Buscar item
+          <input
+            type="text"
+            value={busca}
+            onChange={(event) => setBusca(event.target.value)}
+            placeholder="Digite item, observação, apartamento ou residencial..."
+          />
+        </label>
       </div>
 
+
+
       <div className="table-card">
-        {itens.length === 0 ? (
+        {itensFiltrados.length === 0 ? (
           <div className="empty-box">Nenhum item operacional cadastrado.</div>
         ) : (
           <table className="data-table">
@@ -256,7 +308,7 @@ function ItensOperacionais() {
             </thead>
 
             <tbody>
-              {itens.map((item) => (
+              {itensFiltrados.map((item) => (
                 <tr key={item.id}>
                   <td>
                     <div className="mini-image-box">
