@@ -46,6 +46,14 @@ const frontendPath = path.join(__dirname, "..", "..", "frontend", "dist");
 
 app.use(express.static(frontendPath));
 
+app.get('/health', (req, res) => {
+  res.json({
+    service: 'inventario-api',
+    status: 'ok',
+    time: new Date().toISOString()
+  });
+});
+
 app.get(/^\/(?!api|uploads).*/, (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
