@@ -32,9 +32,9 @@ async function login(email, senha) {
       email: usuario.email,
       perfil: usuario.perfil
     },
-    process.env.JWT_SECRET,
+    process.env.jwt_secret,
     {
-      expiresIn: process.env.JWT_EXPIRES_IN || "1d"
+      expiresIn: process.env.jwt_expires_in || "1d"
     }
   );
 

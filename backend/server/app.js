@@ -7,7 +7,7 @@ const routes = require("../routes");
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const port = process.env.port || 3000;
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -58,7 +58,7 @@ app.get(/^\/(?!api|uploads).*/, (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-  console.log(`Acesse: http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+  console.log(`Acesse: http://localhost:${port}`);
 });
