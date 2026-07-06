@@ -48,4 +48,4 @@ jobs:
       - name: Smoke Test
         run: |
           sleep 30
-          curl --fail https://inventario-api.ambitiousisland-7d5b6aa8.brazilsouth.azurecontainerapps.io/health
+          curl --fail https://api.praiastur.com/inventario/health
