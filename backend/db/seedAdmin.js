@@ -8,7 +8,7 @@ async function seedAdmin() {
 
   const usuario_existente = await Usuario.findOne({
     where: {
-      email: adminEmail
+      email: admin_email
     }
   });
 
@@ -17,7 +17,7 @@ async function seedAdmin() {
     return;
   }
 
-  const senha_criptografada = await bcrypt.hash(adminPassword, 10);
+  const senha_criptografada = await bcrypt.hash(admin_password, 10);
 
   await Usuario.create({
     nome: admin_name,

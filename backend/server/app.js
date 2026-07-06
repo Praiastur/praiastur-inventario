@@ -8,13 +8,15 @@ const routes = require("../routes");
 const app = express();
 
 const port = process.env.port || 3000;
+const client_url = process.env.client_url;
 
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
   "http://192.168.0.21:3000",
-  "http://192.168.0.21:5173"
-];
+  "http://192.168.0.21:5173",
+  client_url
+].filter(Boolean);
 
 app.use(
   cors({
@@ -46,10 +48,10 @@ const frontendPath = path.join(__dirname, "..", "..", "frontend", "dist");
 
 app.use(express.static(frontendPath));
 
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.json({
-    service: 'inventario-api',
-    status: 'ok',
+    service: "inventario-api",
+    status: "ok",
     time: new Date().toISOString()
   });
 });
