@@ -8,15 +8,6 @@ const routes = require("../routes");
 const app = express();
 
 const port = process.env.port || 3000;
-const client_url = process.env.client_url;
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "http://192.168.0.21:3000",
-  "http://192.168.0.21:5173",
-  client_url
-].filter(Boolean);
 
 const client_url = process.env.client_url;
 
