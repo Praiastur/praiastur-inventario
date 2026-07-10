@@ -18,15 +18,22 @@ const allowedOrigins = [
   client_url
 ].filter(Boolean);
 
+const client_url = process.env.client_url;
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://192.168.0.21:5173",
+  "http://192.168.0.21:3000",
+  "https://inventario.praiastur.com",
+  client_url
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("Origem não permitida pelo CORS"));
-    },
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
   })
 );
